@@ -195,8 +195,7 @@
       </section>
     </div>
   </div>
-
-  <script>
+<script>
   (function(){
     var url = window.location.href;
     document.getElementById('from_page').value = url;
@@ -211,13 +210,23 @@
     const statusEl = document.getElementById('formStatus');
     statusEl.style.display = 'none';
 
-    // ✅ التحقق من الحقول الأساسية
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const subject = document.getElementById('subject').value.trim();
-    const message = document.getElementById('message').value.trim();
+    let valid = true;
 
-    if(!name || !email || !subject || !message){
+    // الحقول المطلوبة
+    ['name','email','subject','message'].forEach(id=>{
+      const field = document.getElementById(id);
+      const errorMsg = field.nextElementSibling;
+      if(!field.value.trim()){
+        field.classList.add('error');
+        errorMsg.style.display='block';
+        valid = false;
+      }else{
+        field.classList.remove('error');
+        errorMsg.style.display='none';
+      }
+    });
+
+    if(!valid){
       statusEl.textContent = 'يرجى تعبئة جميع الحقول المطلوبة.';
       statusEl.style.display = 'block';
       return;
@@ -242,5 +251,6 @@
     }
   });
 </script>
+
 </body>
 </html>
