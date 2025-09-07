@@ -9,16 +9,17 @@
     :root{
       --bg:#f7f8fa; --card:#fff; --text:#111827; --muted:#62666d; --line:#e5e7eb;
       --btn:#111827; --btn-hover:#0b1220; --wa:#25D366;
-      --safe-l: env(safe-area-inset-left); --safe-r: env(safe-area-inset-right);
     }
 
     /* ===== Reset + منع التمدد ===== */
     *{ box-sizing:border-box; }
     html, body{
-      margin:0; padding:0;
-      width:100%; max-width:100%;
-      overflow-x: clip;          /* أدق من hidden على iOS */
+      margin:0; padding:0; width:100%; max-width:100%;
+      overflow-x:hidden;
       -webkit-text-size-adjust:100%;
+    }
+    @supports (overflow: clip){
+      html, body{ overflow-x: clip; }
     }
     img, svg, video, canvas{ max-width:100%; height:auto; display:block; }
     input, textarea, button, a{ max-width:100%; }
@@ -29,21 +30,19 @@
       background:var(--bg); color:var(--text);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
       line-height:1.6;
-      padding:24px clamp(12px, 4vw, 24px);
-      padding-left: calc(clamp(12px, 4vw, 24px) + var(--safe-l));
-      padding-right: calc(clamp(12px, 4vw, 24px) + var(--safe-r));
+      padding:24px 16px;
     }
 
     .wrap{
       width:100%; max-width:780px; margin-inline:auto;
-      overflow-x:clip;     /* تأمين إضافي */
+      overflow-x:hidden;
     }
 
     .card{
       background:var(--card); border:1px solid var(--line); border-radius:16px;
       box-shadow:0 6px 22px rgba(0,0,0,.05);
       padding:24px; width:100%; max-width:100%;
-      overflow-x:clip;     /* تأمين إضافي */
+      overflow-x:hidden;
     }
 
     h1{
@@ -53,28 +52,40 @@
     }
     .lead{ margin:0 0 18px; color:var(--muted); text-align:center; }
 
-    form{ display:grid; gap:14px; width:100%; max-width:100%; }
+    form{
+      display:grid; gap:14px; width:100%; max-width:100%;
+      min-width:0;          /* مهم: لا تتمدد أبعد من الشاشة */
+    }
     label{ font-weight:700; font-size:14px; }
 
     input,textarea{
       width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fafafa; font-size:15px; outline:none;
       transition:border-color .2s, box-shadow .2s;
+      min-width:0;          /* منع التمدد */
     }
     input:focus,textarea:focus{ border-color:#111827; box-shadow:0 0 0 3px rgba(17,24,39,.08); background:#fff; }
 
-    .row{ display:grid; grid-template-columns:1fr; gap:14px; width:100%; }
-    @media (min-width:768px){ .row{ grid-template-columns:1fr 1fr; } }
+    .row{
+      display:grid; grid-template-columns:1fr; gap:14px; width:100%;
+      min-width:0;          /* منع التمدد */
+    }
+    .row > *{ min-width:0; } /* أهم سطر لإصلاح الجوال */
+
+    @media (min-width:768px){
+      .row{ grid-template-columns:1fr 1fr; }
+    }
 
     .actions{
       display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; justify-content:center;
-      width:100%;
+      width:100%; min-width:0; overflow-x:hidden;
     }
+    .actions > *{ min-width:0; }  /* منع الأزرار من دفع العرض */
     .btn{
       display:inline-flex; align-items:center; gap:8px;
       padding:12px 18px; border-radius:999px; font-weight:700;
       text-decoration:none; border:0; cursor:pointer;
       background:transparent; color:inherit;
-      white-space:normal;            /* لا نجبرها على سطر واحد */
+      white-space:normal;     /* لا نجبرها على سطر واحد */
     }
     .btn-primary{ background:var(--btn); color:#fff; }
     .btn-primary:hover{ background:var(--btn-hover); }
@@ -88,10 +99,10 @@
 
     /* ===== إصلاحات خاصة للجوال ===== */
     @media (max-width: 768px){
-      body{ padding:16px; }
+      body{ padding:16px 12px; }
+      .card{ padding:20px; }
       .actions{ flex-direction:column; align-items:stretch; }
       .actions .btn{ width:100%; justify-content:center; }
-      .card{ padding:20px; }
     }
   </style>
 </head>
