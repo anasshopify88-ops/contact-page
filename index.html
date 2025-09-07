@@ -7,17 +7,18 @@
   <meta name="description" content="نموذج تواصل لإرسال رسالة إلى البريد وبدء محادثة واتساب.">
   <style>
     :root{
-      /* لوحة ألوان محايدة راقية */
-      --bg:#fafafa;           /* خلفية الصفحة */
-      --card:#ffffff;         /* بطاقة النموذج */
-      --text:#0f172a;         /* نص أساسي (كحلي داكن يميل للأسود) */
-      --muted:#6b7280;        /* نص ثانوي رمادي */
-      --line:#e5e7eb;         /* حدود رقيقة */
-      --btn:#111827;          /* زر أساسي أسود أنيق */
-      --btn-hover:#0b1220;    /* غامق عند الهوفر */
-      --wa:#22c55e;           /* واتساب أخضر محايد ومطفي */
-      --shadow:0 8px 24px rgba(0,0,0,.06);
-      --radius:18px;
+      --bg-grad: radial-gradient(1200px 800px at 80% -10%, #dbeafe 0%, transparent 60%),
+                 radial-gradient(900px 700px at -10% 100%, #f5d0fe 0%, transparent 55%),
+                 linear-gradient(180deg, #f8fafc, #f1f5f9);
+      --card: rgba(255,255,255,0.78);
+      --card-border: rgba(148,163,184,0.22);
+      --text:#0f172a;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --btn:#111827;
+      --btn-hover:#0b1220;
+      --wa:#25D366;
+      --glow: 0 10px 30px rgba(2,6,23,0.08);
     }
 
     /* Reset + منع أي تمدد عرضي */
@@ -28,75 +29,103 @@
     input,textarea,button,a{max-width:100%}
     body,.wrap,.card,form,.row,.actions{overflow-wrap:anywhere;word-break:break-word}
 
-    /* تخطيط عام */
+    /* الخلفية والتخطيط العام */
     body{
       font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
-      color:var(--text); line-height:1.7;
-      background:var(--bg);
-      min-height:100dvh; padding:28px 16px;
-      display:grid; place-items:center;
+      color:var(--text);
+      line-height:1.65;
+      background:var(--bg-grad);
+      padding:28px 16px;
+      min-height:100dvh; /* وحدات آمنة للجوال */
+      display:grid;
+      place-items:center;
     }
-    .wrap{width:100%;max-width:860px}
 
-    /* شريط علوي بسيط */
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-    .brand{font-weight:800;color:#111827;letter-spacing:.2px}
+    .wrap{width:100%;max-width:880px}
+
+    /* الشريط العلوي */
+    .topbar{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-bottom:14px; gap:10px;
+    }
+    .brand{font-weight:900; letter-spacing:.2px; color:#0b1220}
     .back-btn{
       display:inline-flex;align-items:center;gap:10px;
-      padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;
-      color:#111827;text-decoration:none;font-weight:700;cursor:pointer;transition:background .2s, border-color .2s, transform .05s;
+      padding:10px 14px;border-radius:999px;border:1px solid var(--card-border);
+      background:rgba(255,255,255,.6);backdrop-filter:blur(8px);
+      text-decoration:none;color:#0b1220;font-weight:800;cursor:pointer;
+      transition:background .2s, transform .05s;
     }
-    .back-btn:hover{background:#f3f4f6;border-color:#d1d5db}
     .back-btn:active{transform:translateY(1px)}
 
-    /* البطاقة */
     .card{
+      width:100%;
       background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
+      border:1px solid var(--card-border);
+      border-radius:20px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--glow);
       padding:28px;
+      position:relative;
+      isolation:isolate;
+    }
+    /* حافة متوهّجة حول البطاقة */
+    .card::after{
+      content:""; position:absolute; inset:-1px; border-radius:inherit;
+      background:linear-gradient(135deg, rgba(37,99,235,.25), rgba(168,85,247,.25), rgba(16,185,129,.2));
+      z-index:-1; opacity:.35; filter: blur(14px);
     }
 
-    header{text-align:center;margin-bottom:10px}
-    h1{margin:0 0 8px;font-size:clamp(24px,4vw,34px);font-weight:900;letter-spacing:.2px}
+    header{text-align:center;margin-bottom:14px}
+    h1{margin:0 0 8px;font-size:clamp(24px,4.2vw,34px);font-weight:900;letter-spacing:.2px}
     .lead{margin:0;color:var(--muted);font-size:clamp(14px,2.5vw,16px)}
 
-    /* النموذج */
     form{display:grid;gap:16px;margin-top:18px}
-    label{font-weight:800;font-size:13px;color:#111827}
+    label{font-weight:800;font-size:13px;color:#0b1220}
     .row{display:grid;gap:14px;grid-template-columns:1fr;min-width:0}
     .row>*{min-width:0}
-    @media (min-width:768px){.row{grid-template-columns:1fr 1fr}}
+    @media (min-width:768px){ .row{grid-template-columns:1fr 1fr} }
 
     input,textarea{
-      width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#f9fafb;
-      font-size:15px;outline:none;transition:border-color .18s, box-shadow .18s, background .18s;
+      width:100%;
+      padding:13px 14px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#f8fafc;
+      font-size:15px; outline:none;
+      transition:border-color .18s, box-shadow .18s, background .18s;
     }
-    input::placeholder,textarea::placeholder{color:#9ca3af}
-    input:focus,textarea:focus{border-color:#111827;box-shadow:0 0 0 4px rgba(17,24,39,.06);background:#fff}
+    input::placeholder, textarea::placeholder{color:#94a3b8}
+    input:focus,textarea:focus{
+      border-color:#334155;
+      box-shadow:0 0 0 4px rgba(51,65,85,.08);
+      background:#fff;
+    }
 
-    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px;min-width:0}
+    .actions{
+      display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;min-width:0
+    }
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      padding:12px 20px;border-radius:999px;font-weight:800;border:0;cursor:pointer;text-decoration:none;
-      white-space:normal;transition:transform .05s ease, background .2s, box-shadow .2s;
+      padding:13px 20px;border-radius:999px;font-weight:800;border:0;cursor:pointer;text-decoration:none;
+      transition:transform .05s ease, box-shadow .2s, background .2s;
+      white-space:normal;
     }
     .btn:active{transform:translateY(1px)}
-    .btn-primary{background:var(--btn);color:#fff;box-shadow:0 8px 18px rgba(17,24,39,.12)}
+    .btn-primary{background:var(--btn);color:#fff;box-shadow:0 8px 18px rgba(17,24,39,.15)}
     .btn-primary:hover{background:var(--btn-hover)}
-    .btn-wa{background:var(--wa);color:#052e1a;box-shadow:0 8px 18px rgba(34,197,94,.18)}
-    .btn-wa:hover{filter:saturate(1.05)}
+    .btn-wa{background:var(--wa);color:#0f291e;box-shadow:0 8px 18px rgba(16,185,129,.25)}
+    .btn-wa:hover{filter:saturate(1.1)}
 
-    .meta{margin-top:6px;color:#6b7280;font-size:14px;text-align:center}
-    .meta a{color:#111827;text-decoration:underline}
+    .meta{margin-top:8px;color:#475569;font-size:14px;text-align:center}
+    .meta a{color:#0b1220;text-decoration:underline}
 
     .hp{position:absolute;left:-99999px;width:1px;height:1px;overflow:hidden}
     #formStatus{display:none;color:#b91c1c;text-align:center;font-weight:700}
 
-    /* جوال: أزرار بعرض كامل، حشوات أخف */
+    /* موبايل: أزرار بعرض كامل */
     @media (max-width:768px){
-      .card{padding:22px}
+      .card{padding:24px}
       .actions{flex-direction:column;align-items:stretch}
       .actions .btn{width:100%}
     }
@@ -104,20 +133,31 @@
 </head>
 <body>
   <div class="wrap">
+    <!-- الشريط العلوي -->
     <div class="topbar">
       <div class="brand">anasrashed.com</div>
-      <button class="back-btn" type="button" onclick="history.back()" aria-label="رجوع للصفحة السابقة">← رجوع</button>
+      <button class="back-btn" type="button" onclick="history.back()" aria-label="رجوع للصفحة السابقة">
+        ← رجوع
+      </button>
     </div>
 
+    <!-- البطاقة الزجاجية -->
     <div class="card">
       <header>
+        <!-- غيّر العنوان والنص هنا -->
         <h1>تواصل مع أنس راشد</h1>
-        <p class="lead">نرحب برسائلك واستفساراتك. اكتب رسالتك وسنعود إليك قريبًا.</p>
+        <p class="lead">يسعدنا استقبال رسائلك واستفساراتك — اكتب رسالتك وسنرد عليك سريعًا.</p>
       </header>
 
+      <!-- نموذج الإرسال -->
       <form action="https://formspree.io/f/xkgvkvbk" method="POST" id="contactForm" novalidate>
+        <!-- مانع سبام -->
         <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+
+        <!-- موضوع الإيميل (اختياري) -->
         <input type="hidden" name="_subject" value="رسالة جديدة من صفحة تواصل معنا">
+
+        <!-- تمرير رابط الصفحة داخل الرسالة -->
         <input type="hidden" name="from_page" id="from_page">
 
         <div class="row">
@@ -151,14 +191,17 @@
           <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener" aria-label="التواصل عبر واتساب">المحادثة عبر واتساب</a>
         </div>
 
-        <p class="meta">تفضل بمراسلتنا مباشرة: <a href="mailto:Hala@anasrashed.com">Hala@anasrashed.com</a></p>
+        <p class="meta">
+          أو راسلنا مباشرة على: <a href="mailto:Hala@anasrashed.com">Hala@anasrashed.com</a>
+        </p>
+
         <p id="formStatus">حدث خطأ أثناء الإرسال، حاول مرة أخرى.</p>
       </form>
     </div>
   </div>
 
   <script>
-    // إعداد رابط الصفحة + واتساب
+    // تجهيز حقل from_page + زر واتساب
     (function(){
       var url = window.location.href;
       document.getElementById('from_page').value = url;
@@ -167,7 +210,7 @@
       document.getElementById('waBtn').href = waLink;
     })();
 
-    // إرسال عبر fetch ثم التحويل لصفحة الشكر
+    // إرسال عبر fetch ثم تحويل ل thanks.html
     document.getElementById('contactForm').addEventListener('submit', async function(e){
       e.preventDefault();
       const form = e.target;
