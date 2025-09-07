@@ -15,12 +15,7 @@
     }
 
     *,*::before,*::after{box-sizing:border-box}
-    html,body{
-      margin:0; padding:0;
-      width:100%; max-width:100%;
-      overflow-x:clip;
-      -webkit-text-size-adjust:100%;
-    }
+    html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%}
     body,.wrap,.card,form,.row,.actions{overflow-wrap:anywhere;word-break:break-word}
     img,video{max-width:100%;height:auto;display:block}
 
@@ -42,10 +37,9 @@
     }
     .back-btn:active{transform:translateY(1px)}
 
-    /* شبكتين */
+    /* الشبكة */
     .split{
-      display:grid;
-      gap:18px;
+      display:grid; gap:18px;
       grid-template-columns:minmax(0,1fr) minmax(0,1fr);
       align-items:stretch;
     }
@@ -56,9 +50,7 @@
       .img-col{order:2}
     }
 
-    .media{
-      margin:0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);height:100%;
-    }
+    .media{margin:0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);height:100%}
     .media img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius)}
 
     .card{
@@ -81,6 +73,7 @@
 
     form{display:grid;gap:16px;margin-top:16px;max-width:100%}
     label{font-weight:800;font-size:13px;color:#111827}
+
     .row{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
     .row > *{min-width:0}
     @media (min-width:840px){
@@ -110,15 +103,21 @@
     .meta a{color:#0b1220;text-decoration:underline}
     .meta, .meta a, p{overflow-wrap:anywhere;word-break:break-word}
 
-    /* ✅ honeypot بدون تمدد أفقي */
+    /* honeypot بدون تمدد */
     .hp{
       position:absolute !important;
-      width:1px; height:1px;
-      padding:0; margin:-1px; border:0;
+      width:1px; height:1px; padding:0; margin:-1px; border:0;
       clip:rect(0 0 0 0); clip-path:inset(50%);
-      overflow:hidden; white-space:nowrap;
-      opacity:0; pointer-events:none;
+      overflow:hidden; white-space:nowrap; opacity:0; pointer-events:none;
     }
+
+    /* رسائل الخطأ + النجمة الحمراء */
+    .field{display:flex;flex-direction:column}
+    .field.invalid input,
+    .field.invalid textarea{border-color:#b91c1c}
+    .field.invalid label::after{content:" *"; color:#b91c1c; font-weight:900}
+    .error-msg{color:#b91c1c;font-size:13px;margin-top:4px;display:none}
+    .field.invalid .error-msg{display:block}
 
     #formStatus{display:none;color:#b91c1c;text-align:center;font-weight:700}
 
@@ -136,14 +135,11 @@
     </div>
 
     <div class="split">
-      <!-- الصورة الجانبية (كمبيوتر) -->
       <figure class="media img-col" aria-label="صورة شخصية">
         <img src="https://i.imgur.com/B3UkEQ0.png" alt="صورة شخصية">
       </figure>
 
-      <!-- النموذج -->
       <section class="card form-col">
-        <!-- صورة الجوال -->
         <div class="profile-mobile">
           <img src="https://i.imgur.com/B3UkEQ0.png" alt="صورة شخصية">
         </div>
@@ -159,29 +155,34 @@
           <input type="hidden" name="from_page" id="from_page">
 
           <div class="row">
-            <div>
+            <div class="field">
               <label for="name">الاسم الكامل</label>
               <input id="name" name="name" type="text" required placeholder="اكتب اسمك هنا">
+              <span class="error-msg">هذا الحقل مطلوب</span>
             </div>
-            <div>
+            <div class="field">
               <label for="email">البريد الإلكتروني</label>
               <input id="email" name="email" type="email" required placeholder="name@email.com">
+              <span class="error-msg">يرجى إدخال بريد إلكتروني صالح</span>
             </div>
           </div>
 
-          <div>
+          <div class="field">
             <label for="phone">رقم الجوال (اختياري)</label>
             <input id="phone" name="phone" type="tel" placeholder="+9665xxxxxxxx">
+            <span class="error-msg"></span>
           </div>
 
-          <div>
+          <div class="field">
             <label for="subject">الموضوع</label>
             <input id="subject" name="subject" type="text" required placeholder="عن ماذا يدور استفسارك؟">
+            <span class="error-msg">هذا الحقل مطلوب</span>
           </div>
 
-          <div>
+          <div class="field">
             <label for="message">الرسالة</label>
             <textarea id="message" name="message" rows="6" required placeholder="اكتب رسالتك هنا…"></textarea>
+            <span class="error-msg">هذا الحقل مطلوب</span>
           </div>
 
           <div class="actions">
@@ -195,62 +196,79 @@
       </section>
     </div>
   </div>
-<script>
-  (function(){
-    var url = window.location.href;
-    document.getElementById('from_page').value = url;
-    var msg = "مرحباً، لدي استفسار. الرابط: " + url;
-    var waLink = "https://wa.me/966534818298?text=" + encodeURIComponent(msg);
-    document.getElementById('waBtn').href = waLink;
-  })();
 
-  document.getElementById('contactForm').addEventListener('submit', async function(e){
-    e.preventDefault();
-    const form = e.target;
-    const statusEl = document.getElementById('formStatus');
-    statusEl.style.display = 'none';
+  <script>
+    (function(){
+      var url = window.location.href;
+      document.getElementById('from_page').value = url;
+      var msg = "مرحباً، لدي استفسار. الرابط: " + url;
+      var waLink = "https://wa.me/966534818298?text=" + encodeURIComponent(msg);
+      document.getElementById('waBtn').href = waLink;
+    })();
 
-    let valid = true;
+    const form    = document.getElementById('contactForm');
+    const statusEl= document.getElementById('formStatus');
+    const reqIds  = ['name','email','subject','message'];
 
-    // الحقول المطلوبة
-    ['name','email','subject','message'].forEach(id=>{
-      const field = document.getElementById(id);
-      const errorMsg = field.nextElementSibling;
-      if(!field.value.trim()){
-        field.classList.add('error');
-        errorMsg.style.display='block';
-        valid = false;
-      }else{
-        field.classList.remove('error');
-        errorMsg.style.display='none';
-      }
+    // دالة فحص بريد بسيط
+    function isEmail(v){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+
+    // إخفاء رسالة الخطأ عند الكتابة
+    reqIds.forEach(id=>{
+      const field  = document.getElementById(id);
+      field.addEventListener('input', ()=>{
+        const wrap = field.closest('.field');
+        if(field.value.trim() && (id!=='email' || isEmail(field.value.trim()))){
+          wrap.classList.remove('invalid');
+        }
+      });
     });
 
-    if(!valid){
-      statusEl.textContent = 'يرجى تعبئة جميع الحقول المطلوبة.';
-      statusEl.style.display = 'block';
-      return;
-    }
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      statusEl.style.display = 'none';
 
-    try {
-      const data = new FormData(form);
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
+      let valid = true;
+
+      reqIds.forEach(id=>{
+        const field = document.getElementById(id);
+        const wrap  = field.closest('.field');
+        const val   = field.value.trim();
+
+        if(!val || (id==='email' && !isEmail(val))){
+          wrap.classList.add('invalid');   // يضيف النجمة ويظهر الرسالة ويحمّر الإطار
+          valid = false;
+        }else{
+          wrap.classList.remove('invalid');
+        }
       });
-      if (res.ok) {
-        window.location.href = 'thanks.html';
-      } else {
-        statusEl.textContent = 'تعذر الإرسال الآن. تأكد من الحقول وجرب مرة أخرى.';
+
+      if(!valid){
+        statusEl.textContent = 'يرجى تعبئة الحقول المطلوبة بشكل صحيح.';
+        statusEl.style.display = 'block';
+        return;
+      }
+
+      try {
+        const data = new FormData(form);
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          window.location.href = 'thanks.html';
+        } else {
+          statusEl.textContent = 'تعذر الإرسال الآن. تأكد من الحقول وجرب مرة أخرى.';
+          statusEl.style.display = 'block';
+        }
+      } catch (err) {
+        statusEl.textContent = 'انقطع الاتصال. حاول مجددًا.';
         statusEl.style.display = 'block';
       }
-    } catch (err) {
-      statusEl.textContent = 'انقطع الاتصال. حاول مجددًا.';
-      statusEl.style.display = 'block';
-    }
-  });
-</script>
-
+    });
+  </script>
 </body>
 </html>
