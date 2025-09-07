@@ -6,25 +6,24 @@
   <title>تواصل مع أنس راشد</title>
   <meta name="description" content="نموذج تواصل لإرسال رسالة إلى البريد وبدء محادثة واتساب.">
   <style>
-    :root{
+    :root {
       --bg:#f7f8fa; --card:#fff; --text:#111827; --muted:#62666d; --line:#e5e7eb;
       --btn:#111827; --btn-hover:#0b1220; --wa:#25D366;
     }
 
-    /* ========= إصلاحات عامة تمنع التمدد العرضي ========= */
+    /* إصلاحات عامة تمنع التمدد العرضي */
     *, *::before, *::after { box-sizing:border-box; }
     html, body {
       margin:0; padding:0;
       width:100%; max-width:100%;
-      overflow-x:hidden;                 /* منع السحب يمين/يسار */
+      overflow-x:hidden;
       -webkit-text-size-adjust:100%;
     }
     @supports (overflow: clip) {
-      html, body { overflow-x:clip; }    /* أدق في Safari */
+      html, body { overflow-x:clip; }
     }
     img, svg, video, canvas { max-width:100%; height:auto; display:block; }
     input, textarea, button, a { max-width:100%; }
-    /* اكسر أي نص/رابط طويل */
     body, .wrap, .card, form, .row, .actions { overflow-wrap:anywhere; word-break:break-word; }
 
     /* ========= ستايل الكمبيوتر (افتراضي) ========= */
@@ -70,7 +69,7 @@
       gap:14px;
       width:100%;
       max-width:100%;
-      min-width:0;                 /* مهم للشبكات */
+      min-width:0;
     }
 
     label { font-weight:700; font-size:14px; }
@@ -84,7 +83,7 @@
       font-size:15px;
       outline:none;
       transition:border-color .2s, box-shadow .2s;
-      min-width:0;                 /* يمنع التمدد */
+      min-width:0;
     }
 
     input:focus, textarea:focus {
@@ -98,9 +97,9 @@
       grid-template-columns:1fr;
       gap:14px;
       width:100%;
-      min-width:0;                 /* أهم سطر للجوال */
+      min-width:0;
     }
-    .row > * { min-width:0; }      /* لا تسمح للأعمدة بالدفع أفقياً */
+    .row > * { min-width:0; }
 
     @media (min-width:768px) {
       .row { grid-template-columns:1fr 1fr; }
@@ -129,7 +128,7 @@
       cursor:pointer;
       background:transparent;
       color:inherit;
-      white-space:normal;          /* لا نجبرها على سطر واحد */
+      white-space:normal;
     }
     .btn-primary { background:var(--btn); color:#fff; }
     .btn-primary:hover { background:var(--btn-hover); }
@@ -210,7 +209,7 @@
       document.getElementById('waBtn').href = waLink;
     })();
 
-    // إرسال عبر fetch ثم توجيه لصفحة الشكر (مجاناً)
+    // إرسال عبر fetch ثم توجيه لصفحة الشكر
     document.getElementById('contactForm').addEventListener('submit', async function(e){
       e.preventDefault();
       const form = e.target;
