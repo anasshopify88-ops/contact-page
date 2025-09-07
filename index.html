@@ -17,7 +17,6 @@
     *,*::before,*::after{box-sizing:border-box}
     html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
     body,.wrap,.card,form,.row,.actions{overflow-wrap:anywhere;word-break:break-word}
-    figure{margin:0} /* يمنع نزول الصورة */
 
     body{
       font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
@@ -85,13 +84,13 @@
         justify-content:center;
         margin-bottom:14px;
       }
-      .profile-mobile img {
-        width:180px;
-        height:180px;
-        border-radius:50%;
-        object-fit:contain;
-        background:#fff;
-      }
+.profile-mobile img {
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  object-fit:contain;
+  background:#fff; /* عشان الفراغ يكون بلون أبيض */
+}
     }
 
     header{text-align:center;margin-bottom:12px}
@@ -133,23 +132,7 @@
       .actions{flex-direction:column;align-items:stretch}
       .actions .btn{width:100%}
     }
-
-    /* 🛠 إصلاح التمدد الأفقي على الجوال (مطابق لفكرة النموذج البسيط) */
-    @media (max-width:900px){
-      html,body{overflow-x:hidden}
-      .wrap, .topbar, .split, .card, .media, .form-col, .img-col, form, .row, .actions{
-        width:100%;
-        max-width:100%;
-        min-width:0;
-        overflow-x:hidden;
-      }
-      .split > *, .row > * { min-width:0; }
-      .actions .btn, .meta, .meta a{white-space:normal;word-break:break-word;overflow-wrap:anywhere;max-width:100%}
-      input, textarea { max-width:100%; }
-      .profile-mobile, .profile-mobile img { max-width:100%; }
-    }
   </style>
-
 </head>
 <body>
   <div class="wrap">
