@@ -7,7 +7,6 @@
   <meta name="description" content="نموذج تواصل لإرسال رسالة إلى البريد وبدء محادثة واتساب.">
   <style>
     :root{
-      /* خلفية هادئة وصندوق أبيض؛ الأزرار كما هي (أسود + واتساب) */
       --bg-grad: linear-gradient(180deg, #f0f9ff, #e0f2fe);
       --card:#ffffff; --card-border:#e2e8f0;
       --text:#0f172a; --muted:#475569; --line:#cbd5e1;
@@ -15,12 +14,8 @@
       --radius:20px; --shadow:0 10px 30px rgba(15,23,42,0.08);
     }
 
-    /* Reset + منع سحب أفقي */
     *,*::before,*::after{box-sizing:border-box}
     html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
-    @supports(overflow:clip){html,body{overflow-x:clip}}
-    img,svg,video,canvas{max-width:100%;height:auto;display:block}
-    input,textarea,button,a{max-width:100%}
     body,.wrap,.card,form,.row,.actions{overflow-wrap:anywhere;word-break:break-word}
 
     body{
@@ -32,7 +27,6 @@
     }
     .wrap{width:100%;max-width:1040px}
 
-    /* شريط علوي: زر رجوع يسار */
     .topbar{display:flex;justify-content:flex-start;margin-bottom:14px}
     .back-btn{
       display:inline-flex;align-items:center;gap:8px;
@@ -42,43 +36,36 @@
     }
     .back-btn:active{transform:translateY(1px)}
 
-    /* تخطيط: صورتك يسار، النموذج يمين */
+    /* تخطيط: صورتك + النموذج */
     .split{
-  display:grid;
-  gap:18px;
-  grid-template-columns:1fr 1fr;
-  align-items:stretch;   /* يخلي كل الأعمدة بنفس الطول */
-}
-@media (max-width:900px){
-  .split{grid-template-columns:1fr}
-  .form-col{order:1}
-  .img-col{order:2}
-}
+      display:grid;
+      gap:18px;
+      grid-template-columns:1fr 1fr;
+      align-items:stretch; /* يخلي الأعمدة بنفس الطول */
+    }
+    @media (max-width:900px){
+      .split{grid-template-columns:1fr}
+      .form-col{order:1}
+      .img-col{order:2}
+    }
 
-.media{
-  border-radius:var(--radius);
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  height:100%;           /* مهم: يخلي العمود يتمدد */
-}
-.media img{
-  width:100%;
-  height:100%;           /* ياخذ الطول كامل */
-  object-fit:cover;      /* يقص الزوايد ويخليها متناسبة */
-  border-radius:var(--radius);
-}
+    .media{
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;  /* يملأ المساحة ويحافظ على التناسب */
+      border-radius:var(--radius);
+    }
 
-.card{
-  background:var(--card);
-  border:1px solid var(--card-border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:26px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  height:100%;           /* مهم: يخلي النموذج يتمدد مثل الصورة */
-}
+    .card{
+      background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:26px;
+      display:flex;flex-direction:column;justify-content:center
+    }
 
     header{text-align:center;margin-bottom:12px}
     h1{margin:0 0 8px;font-size:clamp(24px,3.8vw,34px);font-weight:900}
@@ -114,7 +101,6 @@
     .hp{position:absolute;left:-9999px}
     #formStatus{display:none;color:#b91c1c;text-align:center;font-weight:700}
 
-    /* جوال: الأزرار بعرض كامل */
     @media (max-width:768px){
       .card{padding:22px}
       .actions{flex-direction:column;align-items:stretch}
@@ -129,13 +115,12 @@
     </div>
 
     <div class="split">
-      <!-- عمود الصورة (يسار على الديسكتوب) -->
+      <!-- الصورة -->
       <figure class="media img-col" aria-label="صورة شخصية">
-        <!-- ✅ ضع رابط الصورة المباشر (Imgur) -->
         <img src="https://i.imgur.com/B3UkEQ0.png" alt="صورة شخصية">
       </figure>
 
-      <!-- عمود النموذج (يمين على الديسكتوب) -->
+      <!-- النموذج -->
       <section class="card form-col">
         <header>
           <h1>تواصل مع أنس راشد</h1>
@@ -175,7 +160,7 @@
 
           <div class="actions">
             <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
-            <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener" aria-label="التواصل عبر واتساب">المحادثة عبر واتساب</a>
+            <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener">المحادثة عبر واتساب</a>
           </div>
 
           <p class="meta">أو راسلنا مباشرة على: <a href="mailto:Hala@anasrashed.com">Hala@anasrashed.com</a></p>
@@ -186,7 +171,6 @@
   </div>
 
   <script>
-    // تمرير رابط الصفحة + تهيئة رسالة واتساب
     (function(){
       var url = window.location.href;
       document.getElementById('from_page').value = url;
@@ -195,7 +179,6 @@
       document.getElementById('waBtn').href = waLink;
     })();
 
-    // إرسال عبر fetch ثم تحويل ل thanks.html (لو عندك صفحة شكر)
     document.getElementById('contactForm').addEventListener('submit', async function(e){
       e.preventDefault();
       const form = e.target;
