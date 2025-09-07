@@ -5,86 +5,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>تواصل مع أنس راشد</title>
   <meta name="description" content="نموذج تواصل لإرسال رسالة إلى البريد وبدء محادثة واتساب.">
-<style>
-  :root{
-    --bg:#f7f8fa; --card:#fff; --text:#111827; --muted:#62666d; --line:#e5e7eb;
-    --btn:#111827; --btn-hover:#0b1220; --wa:#25D366;
-  }
+  <style>
+    :root{
+      --bg:#f7f8fa; --card:#fff; --text:#111827; --muted:#62666d; --line:#e5e7eb;
+      --btn:#111827; --btn-hover:#0b1220; --wa:#25D366;
+    }
 
-  /* منع التمدد أفقياً على كل المتصفحات */
-  *{ box-sizing:border-box; min-width:0; }
-  html, body{
-    margin:0; padding:0;
-    width:100%; max-width:100%;
-    overflow-x:hidden;
-    -webkit-text-size-adjust:100%;
-    overscroll-behavior-x: contain;
-  }
-  @supports (overflow: clip){
-    html, body{ overflow-x:clip; }
-  }
+    /* ===== Reset صارم لمنع التمدد ===== */
+    *, *::before, *::after{ box-sizing:border-box; min-width:0; }
+    html, body{
+      margin:0; padding:0;
+      width:100vw; max-width:100vw;  /* لا تتجاوز عرض الشاشة */
+      overflow-x:hidden;
+      -webkit-text-size-adjust:100%;
+    }
+    @supports (overflow: clip){
+      html, body{ overflow-x:clip; }
+    }
 
-  /* لا تسمح لأي عنصر يتجاوز عرض الشاشة */
-  body, .wrap, .card, form, .row, .actions{
-    width:100%; max-width:100%;
-    overflow-wrap:anywhere; word-break:break-word;
-  }
+    /* لا تسمح لأي عنصر أن يتجاوز 100vw */
+    body, .wrap, .card, form, .row, .actions{
+      width:100%; max-width:100vw;
+      overflow-wrap:anywhere; word-break:break-word;
+    }
 
-  body{
-    background:var(--bg); color:var(--text);
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
-    line-height:1.6;
-    padding:24px 16px;
-  }
+    img, svg, video, canvas{ max-width:100%; height:auto; display:block; }
+    input, textarea, button, a{ max-width:100%; }
 
-  .wrap{ margin-inline:auto; max-width:780px; }
-  .card{
-    background:var(--card); border:1px solid var(--line); border-radius:16px;
-    box-shadow:0 6px 22px rgba(0,0,0,.05);
-    padding:24px;
-  }
+    body{
+      background:var(--bg); color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
+      line-height:1.6;
+      padding:24px 16px;
+    }
 
-  h1{ margin:0 0 10px; font-size:clamp(22px,3vw,30px); font-weight:800; text-align:center }
-  .lead{ margin:0 0 18px; color:var(--muted); text-align:center }
+    .wrap{
+      margin-inline:auto;
+      width:100%; max-width:780px;
+    }
 
-  form{ display:grid; gap:14px }
-  label{ font-weight:700; font-size:14px }
+    .card{
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      box-shadow:0 6px 22px rgba(0,0,0,.05);
+      padding:24px;
+    }
 
-  input, textarea{
-    width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fafafa; font-size:15px; outline:none;
-    transition:border-color .2s, box-shadow .2s;
-  }
-  input:focus, textarea:focus{ border-color:#111827; box-shadow:0 0 0 3px rgba(17,24,39,.08); background:#fff }
+    h1{
+      margin:0 0 10px;
+      font-size:clamp(22px,3vw,30px);
+      font-weight:800; text-align:center;
+    }
+    .lead{ margin:0 0 18px; color:var(--muted); text-align:center; }
 
-  .row{ display:grid; grid-template-columns:1fr; gap:14px }
-  @media (min-width:768px){ .row{ grid-template-columns:1fr 1fr } }
+    form{
+      display:grid; gap:14px;
+    }
+    label{ font-weight:700; font-size:14px; }
 
-  .actions{
-    display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:6px;
-  }
-  .btn{
-    display:inline-flex; align-items:center; gap:8px;
-    padding:12px 18px; border-radius:999px; font-weight:700; text-decoration:none; border:0; cursor:pointer;
-    background:transparent; color:inherit;
-    white-space:normal;           /* مهم: اسمح بالتفاف النص */
-  }
-  .btn-primary{ background:var(--btn); color:#fff }
-  .btn-primary:hover{ background:var(--btn-hover) }
-  .btn-wa{ background:var(--wa); color:#fff }
+    input,textarea{
+      width:100%;
+      padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fafafa; font-size:15px; outline:none;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    input:focus,textarea:focus{ border-color:#111827; box-shadow:0 0 0 3px rgba(17,24,39,.08); background:#fff; }
 
-  .meta{ margin-top:10px; color:var(--muted); font-size:14px; text-align:center }
-  .meta a{ color:var(--text); text-decoration:underline }
+    .row{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+      /* أهم شيء: لا تسمح للأعمدة تتمدد أفقياً */
+      min-width:0;
+    }
+    .row > *{ min-width:0; }
 
-  .hp{ position:absolute; left:-99999px; width:1px; height:1px; overflow:hidden }
-  #formStatus{ display:none; color:#b91c1c; text-align:center }
+    @media (min-width:768px){
+      .row{ grid-template-columns:1fr 1fr; }
+    }
 
-  /* ترتيب خاص للجوال: الأزرار عموديًا وبعرض كامل */
-  @media (max-width:768px){
-    .card{ padding:20px }
-    .actions{ flex-direction:column; align-items:stretch }
-    .actions .btn{ width:100%; justify-content:center }
-  }
-</style>
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:6px;
+      min-width:0;
+    }
+    .actions > *{ min-width:0; }
+
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:12px 18px; border-radius:999px; font-weight:700;
+      text-decoration:none; border:0; cursor:pointer;
+      background:transparent; color:inherit;
+      white-space:normal;  /* لا نجبرها على سطر واحد */
+    }
+    .btn-primary{ background:var(--btn); color:#fff; }
+    .btn-primary:hover{ background:var(--btn-hover); }
+    .btn-wa{ background:var(--wa); color:#fff; }
+
+    .meta{ margin-top:10px; color:var(--muted); font-size:14px; text-align:center; }
+    .meta a{ color:var(--text); text-decoration:underline; }
+
+    .hp{ position:absolute; left:-99999px; width:1px; height:1px; overflow:hidden; }
+    #formStatus{ display:none; color:#b91c1c; text-align:center; }
+
+    /* ===== ترتيب خاص للجوال ===== */
+    @media (max-width: 768px){
+      .card{ padding:20px; }
+      .actions{ flex-direction:column; align-items:stretch; }
+      .actions .btn{ width:100%; justify-content:center; }
+    }
+  </style>
 </head>
 <body>
   <div class="wrap">
