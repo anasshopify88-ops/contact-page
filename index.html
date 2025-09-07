@@ -1,215 +1,192 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>تواصل مع أنس راشد</title>
-  <meta name="description" content="نموذج تواصل لإرسال رسالة إلى البريد وبدء محادثة واتساب.">
+  <meta name="description" content="نموذج تواصل وإرسال واتساب">
   <style>
-    :root {
-      --bg:#f7f8fa; --card:#fff; --text:#111827; --muted:#62666d; --line:#e5e7eb;
-      --btn:#111827; --btn-hover:#0b1220; --wa:#25D366;
+    :root{
+      --bg:#f7f8fa; --card:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e5e7eb;
+      --btn:#111827; --btn-hover:#0b1220; --wa:#22c55e;
+      --radius:20px; --shadow:0 10px 30px rgba(2,6,23,.08);
     }
 
-    /* إصلاحات عامة تمنع التمدد العرضي */
-    *, *::before, *::after { box-sizing:border-box; }
-    html, body {
-      margin:0; padding:0;
-      width:100%; max-width:100%;
-      overflow-x:hidden;
-      -webkit-text-size-adjust:100%;
-    }
-    @supports (overflow: clip) {
-      html, body { overflow-x:clip; }
-    }
-    img, svg, video, canvas { max-width:100%; height:auto; display:block; }
-    input, textarea, button, a { max-width:100%; }
-    body, .wrap, .card, form, .row, .actions { overflow-wrap:anywhere; word-break:break-word; }
+    /* Reset + منع أي سحب أفقي */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
+    @supports(overflow:clip){html,body{overflow-x:clip}}
+    img,svg,video,canvas{max-width:100%;height:auto;display:block}
+    input,textarea,button,a{max-width:100%}
+    body,.wrap,.card,form,.row,.actions{overflow-wrap:anywhere;word-break:break-word}
 
-    /* ========= ستايل الكمبيوتر (افتراضي) ========= */
-    body {
-      background:var(--bg);
-      color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
-      line-height:1.6;
-      padding:24px;
+    body{
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
+      color:var(--text); background:var(--bg);
+      min-height:100dvh; display:grid; place-items:center;
+      padding:28px 16px;
     }
 
-    .wrap {
-      width:100%;
-      max-width:780px;
-      margin-inline:auto;
+    .wrap{width:100%;max-width:1040px}
+
+    /* شريط علوي */
+    .topbar{display:flex;justify-content:left;align-items:center;margin-bottom:16px;gap:10px}
+    .brand{font-weight:900;color:#111827;letter-spacing:.2px}
+    .back-btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;
+      color:#111827;text-decoration:none;font-weight:800;cursor:pointer;transition:background .2s,border-color .2s,transform .05s;
+    }
+    .back-btn:hover{background:#f3f4f6;border-color:#d1d5db}
+    .back-btn:active{transform:translateY(1px)}
+
+    /* الحاوية الثنائية: الصورة يسار – النموذج يمين */
+    .split{
+      display:grid; gap:18px;
+      grid-template-columns: 1fr 1fr;     /* عمود 1 يسار، عمود 2 يمين */
+      align-items:stretch;
     }
 
-    .card {
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:16px;
-      box-shadow:0 6px 22px rgba(0,0,0,.05);
-      padding:24px;
-      width:100%;
-      max-width:100%;
+    .media{
+      background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); overflow:hidden; display:flex; align-items:stretch;
+    }
+    .media img{
+      width:100%; height:100%; object-fit:cover;
+      /* غيّر الارتفاع المطلوب لصورتك على الديسكتوب */
+      aspect-ratio: 4 / 5;                 /* عمودية أنيقة */
     }
 
-    h1 {
-      margin:0 0 10px;
-      font-size:clamp(22px,3vw,30px);
-      font-weight:800;
-      text-align:center;
+    .card{
+      background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:26px; display:flex; flex-direction:column; justify-content:center;
     }
 
-    .lead {
-      margin:0 0 18px;
-      color:var(--muted);
-      text-align:center;
+    header{text-align:center;margin-bottom:10px}
+    h1{margin:0 0 8px;font-size:clamp(24px,3.6vw,34px);font-weight:900;letter-spacing:.2px}
+    .lead{margin:0;color:var(--muted);font-size:clamp(14px,2.4vw,16px)}
+
+    form{display:grid;gap:16px;margin-top:18px}
+    label{font-weight:800;font-size:13px;color:#111827}
+    .row{display:grid;gap:14px;grid-template-columns:1fr;min-width:0}
+    .row>*{min-width:0}
+    @media (min-width:840px){ .row{grid-template-columns:1fr 1fr} }
+
+    input,textarea{
+      width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#f9fafb;
+      font-size:15px;outline:none;transition:border-color .18s, box-shadow .18s, background .18s;
+    }
+    input::placeholder,textarea::placeholder{color:#9ca3af}
+    input:focus,textarea:focus{border-color:#111827;box-shadow:0 0 0 4px rgba(17,24,39,.06);background:#fff}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px;min-width:0}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px 20px;border-radius:999px;font-weight:800;border:0;cursor:pointer;text-decoration:none;
+      white-space:normal;transition:transform .05s ease, background .2s, box-shadow .2s;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn-primary{background:var(--btn);color:#fff;box-shadow:0 8px 18px rgba(17,24,39,.12)}
+    .btn-primary:hover{background:var(--btn-hover)}
+    .btn-wa{background:var(--wa);color:#052e1a;box-shadow:0 8px 18px rgba(34,197,94,.18)}
+    .btn-wa:hover{filter:saturate(1.05)}
+
+    .meta{margin-top:6px;color:#6b7280;font-size:14px;text-align:center}
+    .meta a{color:#111827;text-decoration:underline}
+
+    .hp{position:absolute;left:-99999px;width:1px;height:1px;overflow:hidden}
+    #formStatus{display:none;color:#b91c1c;text-align:center;font-weight:700}
+
+    /* ترتيب الجوال: نجعلهم عمود واحد ويظهر النموذج أولاً ثم الصورة */
+    @media (max-width: 900px){
+      .split{grid-template-columns:1fr}
+      .card{order:1}
+      .media{order:2}
+      /* لو تبغى الصورة أولاً على الجوال: بدّل الأوامر أعلاه (خلّي media order:1 و card order:2) */
     }
 
-    form {
-      display:grid;
-      gap:14px;
-      width:100%;
-      max-width:100%;
-      min-width:0;
-    }
-
-    label { font-weight:700; font-size:14px; }
-
-    input, textarea {
-      width:100%;
-      padding:12px 14px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      background:#fafafa;
-      font-size:15px;
-      outline:none;
-      transition:border-color .2s, box-shadow .2s;
-      min-width:0;
-    }
-
-    input:focus, textarea:focus {
-      border-color:#111827;
-      box-shadow:0 0 0 3px rgba(17,24,39,.08);
-      background:#fff;
-    }
-
-    .row {
-      display:grid;
-      grid-template-columns:1fr;
-      gap:14px;
-      width:100%;
-      min-width:0;
-    }
-    .row > * { min-width:0; }
-
-    @media (min-width:768px) {
-      .row { grid-template-columns:1fr 1fr; }
-    }
-
-    .actions {
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:6px;
-      justify-content:center;
-      width:100%;
-      min-width:0;
-    }
-    .actions > * { min-width:0; }
-
-    .btn {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:12px 18px;
-      border-radius:999px;
-      font-weight:700;
-      text-decoration:none;
-      border:0;
-      cursor:pointer;
-      background:transparent;
-      color:inherit;
-      white-space:normal;
-    }
-    .btn-primary { background:var(--btn); color:#fff; }
-    .btn-primary:hover { background:var(--btn-hover); }
-    .btn-wa { background:var(--wa); color:#fff; }
-
-    .meta { margin-top:10px; color:var(--muted); font-size:14px; text-align:center; }
-    .meta a { color:var(--text); text-decoration:underline; }
-
-    .hp { position:absolute; left:-99999px; width:1px; height:1px; overflow:hidden; }
-    #formStatus { display:none; color:#b91c1c; text-align:center; }
-
-    /* ========= ستايل الجوال ========= */
-    @media (max-width:768px) {
-      body { padding:16px; }
-      .card { padding:20px; }
-      .actions { flex-direction:column; align-items:stretch; }
-      .actions .btn { width:100%; justify-content:center; }
+    /* تضبيط مسافات على الشاشات الصغيرة */
+    @media (max-width:768px){
+      .card{padding:22px}
+      .actions{flex-direction:column;align-items:stretch}
+      .actions .btn{width:100%}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>تواصل مع أنس راشد</h1>
-      <p class="lead">حياك الله يا عزيزي، يسعدني تواصلك. اكتب رسالتك وبرد عليك بأقرب وقت.</p>
+    <div class="topbar">
+      <button class="back-btn" type="button" onclick="history.back()" aria-label="رجوع للصفحة السابقة">← رجوع</button>
+    </div>
 
-      <!-- نموذج الإرسال -->
-      <form action="https://formspree.io/f/xkgvkvbk" method="POST" id="contactForm">
-        <!-- honeypot لمنع السبام -->
-        <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+    <div class="split">
+      <!-- (يسار الديسكتوب) ضع رابط صورتك هنا -->
+      <figure class="media" aria-label="صورة أنس راشد">
+        <!-- ✅ غيّر src إلى رابط صورتك: -->
+        <img src="https://postimg.cc/nXT9sbqT" alt="صورة شخصية">
+      </figure>
 
-        <!-- موضوع الإيميل (اختياري) -->
-        <input type="hidden" name="_subject" value="رسالة جديدة من صفحة تواصل معنا">
+      <!-- (يمين الديسكتوب) بطاقة النموذج -->
+      <section class="card">
+        <header>
+          <h1>تواصل مع أنس راشد</h1>
+          <p class="lead">يسعدنا استقبال رسائلك واستفساراتك — اكتب رسالتك وسنرد عليك سريعًا.</p>
+        </header>
 
-        <!-- تمرير رابط الصفحة داخل الرسالة -->
-        <input type="hidden" name="from_page" id="from_page">
+        <form action="https://formspree.io/f/xkgvkvbk" method="POST" id="contactForm" novalidate>
+          <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+          <input type="hidden" name="_subject" value="رسالة جديدة من صفحة تواصل معنا">
+          <input type="hidden" name="from_page" id="from_page">
 
-        <div class="row">
-          <div>
-            <label>الاسم</label>
-            <input type="text" name="name" required>
+          <div class="row">
+            <div>
+              <label for="name">الاسم الكامل</label>
+              <input id="name" name="name" type="text" required placeholder="اكتب اسمك هنا">
+            </div>
+            <div>
+              <label for="email">البريد الإلكتروني</label>
+              <input id="email" name="email" type="email" required placeholder="name@email.com">
+            </div>
           </div>
+
           <div>
-            <label>البريد الإلكتروني</label>
-            <input type="email" name="email" required>
+            <label for="phone">رقم الجوال (اختياري)</label>
+            <input id="phone" name="phone" type="tel" placeholder="+9665xxxxxxxx">
           </div>
-        </div>
 
-        <label>رقم الجوال (اختياري)</label>
-        <input type="tel" name="phone" placeholder="+9665xxxxxxxx">
+          <div>
+            <label for="subject">الموضوع</label>
+            <input id="subject" name="subject" type="text" required placeholder="عن ماذا يدور استفسارك؟">
+          </div>
 
-        <label>الموضوع</label>
-        <input type="text" name="subject" required placeholder="موضوع الرسالة؟">
+          <div>
+            <label for="message">الرسالة</label>
+            <textarea id="message" name="message" rows="6" required placeholder="اكتب رسالتك هنا…"></textarea>
+          </div>
 
-        <label>الرسالة</label>
-        <textarea name="message" rows="6" required placeholder="اكتب رسالتك هنا…"></textarea>
+          <div class="actions">
+            <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
+            <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener" aria-label="التواصل عبر واتساب">المحادثة عبر واتساب</a>
+          </div>
 
-        <div class="actions">
-          <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
-          <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener">المحادثة عبر واتساب</a>
-        </div>
-
-        <p class="meta">
-          أو راسلنا مباشرة: <a href="mailto:Hala@anasrashed.com">Hala@anasrashed.com</a>
-        </p>
-
-        <p id="formStatus">حدث خطأ أثناء الإرسال، حاول مرة أخرى.</p>
-      </form>
+          <p class="meta">تفضل بمراسلتنا مباشرة: <a href="mailto:Hala@anasrashed.com">Hala@anasrashed.com</a></p>
+          <p id="formStatus">حدث خطأ أثناء الإرسال، حاول مرة أخرى.</p>
+        </form>
+      </section>
     </div>
   </div>
 
   <script>
-    // تجهيز حقل from_page + زر واتساب
+    // إعداد رابط الصفحة + واتساب
     (function(){
       var url = window.location.href;
       document.getElementById('from_page').value = url;
-      var waLink = "https://wa.me/966534818298?text=" + encodeURIComponent("مرحباً، لدي استفسار. الرابط: " + url);
+      var msg = "مرحباً، لدي استفسار. الرابط: " + url;
+      var waLink = "https://wa.me/966534818298?text=" + encodeURIComponent(msg);
       document.getElementById('waBtn').href = waLink;
     })();
 
-    // إرسال عبر fetch ثم توجيه لصفحة الشكر
+    // إرسال عبر fetch ثم التحويل لصفحة الشكر
     document.getElementById('contactForm').addEventListener('submit', async function(e){
       e.preventDefault();
       const form = e.target;
