@@ -14,14 +14,12 @@
       --radius:20px; --shadow:0 10px 30px rgba(15,23,42,0.08);
     }
 
-    /* أساسيات + منع أي تمدد عام */
     *,*::before,*::after{box-sizing:border-box}
-    html,body{
-      margin:0;padding:0;width:100%;max-width:100%;
-      overflow-x:hidden; -webkit-text-size-adjust:100%;
-    }
+    html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
     body,.wrap,.card,form,.row,.actions{overflow-wrap:anywhere;word-break:break-word}
-    figure{margin:0}
+
+    /* ✅ ضمان عدم تمدد الوسائط */
+    img,video{max-width:100%;height:auto;display:block}
 
     body{
       font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
@@ -32,7 +30,7 @@
     }
     .wrap{width:100%;max-width:1040px}
 
-    .topbar{display:flex;justify-content:flex-start;margin-bottom:14px;width:100%}
+    .topbar{display:flex;justify-content:flex-start;margin-bottom:14px}
     .back-btn{
       display:inline-flex;align-items:center;gap:8px;
       padding:9px 14px;border-radius:999px;border:1px solid var(--card-border);
@@ -41,15 +39,15 @@
     }
     .back-btn:active{transform:translateY(1px)}
 
-    /* عمودين على الديسكتوب */
+    /* ✅ تقسيم عمودين على الكمبيوتر */
     .split{
       display:grid;
       gap:18px;
       grid-template-columns:1fr 1fr;
       align-items:stretch;
-      width:100%; max-width:100%; min-width:0;
     }
-    .split > * { min-width:0; } /* مهم جداً */
+    /* ✅ إصلاح تمدد العناصر داخل Grid */
+    .split > *{min-width:0}
 
     @media (max-width:900px){
       .split{grid-template-columns:1fr}
@@ -63,15 +61,12 @@
       overflow:hidden;
       box-shadow:var(--shadow);
       height:100%;
-      width:100%; max-width:100%;
     }
     .media img{
       width:100%;
       height:100%;
       object-fit:cover;
       border-radius:var(--radius);
-      display:block;
-      max-width:100%;
     }
 
     .card{
@@ -84,10 +79,9 @@
       flex-direction:column;
       justify-content:center;
       height:100%;
-      width:100%; max-width:100%;
     }
 
-    /* صورة دائرية للجوال */
+    /* ✅ صورة دائرية للجوال */
     .profile-mobile { display:none; }
     @media (max-width:900px){
       .media { display:none; } /* أخفي الصورة الجانبية */
@@ -95,7 +89,6 @@
         display:flex;
         justify-content:center;
         margin-bottom:14px;
-        width:100%;
       }
       .profile-mobile img {
         width:180px;
@@ -103,8 +96,6 @@
         border-radius:50%;
         object-fit:contain;
         background:#fff;
-        display:block;
-        max-width:100%;
       }
     }
 
@@ -112,35 +103,26 @@
     h1{margin:0 0 8px;font-size:clamp(24px,3.8vw,34px);font-weight:900}
     .lead{margin:0;color:var(--muted);font-size:clamp(14px,2.5vw,16px)}
 
-    form{
-      display:grid;gap:16px;margin-top:16px;
-      width:100%;max-width:100%;min-width:0;
-    }
+    form{display:grid;gap:16px;margin-top:16px}
     label{font-weight:800;font-size:13px;color:#111827}
-    .row{
-      display:grid;gap:14px;grid-template-columns:1fr;
-      width:100%;max-width:100%;min-width:0;
-    }
-    .row > * { min-width:0; }
+    .row{display:grid;gap:14px;grid-template-columns:1fr}
+    /* ✅ منع التمدد داخل صفوف الحقول */
+    .row > *{min-width:0}
+
     @media (min-width:840px){.row{grid-template-columns:1fr 1fr}}
 
     input,textarea{
-      width:100%;max-width:100%;
-      padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#f8fafc;
+      width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#f8fafc;
       font-size:15px;outline:none;transition:border-color .18s, box-shadow .18s, background .18s
     }
     input::placeholder,textarea::placeholder{color:#94a3b8}
     input:focus,textarea:focus{border-color:#111827;box-shadow:0 0 0 4px rgba(17,24,39,.06);background:#fff}
 
-    .actions{
-      display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;
-      width:100%;max-width:100%;min-width:0;
-    }
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
       padding:12px 20px;border-radius:999px;font-weight:800;border:0;cursor:pointer;text-decoration:none;
-      transition:transform .05s, background .2s, box-shadow .2s;white-space:normal;
-      max-width:100%;
+      transition:transform .05s, background .2s, box-shadow .2s;white-space:normal
     }
     .btn:active{transform:translateY(1px)}
     .btn-primary{background:var(--btn);color:#fff;box-shadow:0 8px 18px rgba(17,24,39,.12)}
@@ -149,7 +131,9 @@
     .btn-wa:hover{filter:saturate(1.05)}
 
     .meta{margin-top:6px;color:#475569;font-size:14px;text-align:center}
-    .meta a{color:#0b1220;text-decoration:underline;word-break:break-word;overflow-wrap:anywhere}
+    .meta a{color:#0b1220;text-decoration:underline}
+    /* ✅ حماية إضافية ضد التمدد من الروابط */
+    .meta, .meta a, p{overflow-wrap:anywhere;word-break:break-word}
 
     .hp{position:absolute;left:-9999px}
     #formStatus{display:none;color:#b91c1c;text-align:center;font-weight:700}
@@ -159,20 +143,7 @@
       .actions{flex-direction:column;align-items:stretch}
       .actions .btn{width:100%}
     }
-
-    /* 🔒 قفل صريح للعرض على الجوال (نسخة قوية) */
-    @media (max-width:900px){
-      html,body{overflow-x:hidden}
-      .wrap, .topbar, .split, .card, .media, .form-col, .img-col, form, .row, .actions{
-        width:100%; max-width:100%; min-width:0; overflow-x:hidden;
-      }
-      .split > *, .row > * { min-width:0; }
-      a, button, .actions .btn{white-space:normal;word-break:break-word;overflow-wrap:anywhere;max-width:100%}
-      input, textarea { max-width:100%; }
-      .profile-mobile, .profile-mobile img { max-width:100%; }
-    }
   </style>
-
 </head>
 <body>
   <div class="wrap">
@@ -274,15 +245,6 @@
         statusEl.style.display = 'block';
       }
     });
-
-    /* 🔎 سكربت تشخيص مؤقت: يحدد بالأحمر أي عنصر أعرض من الشاشة (احذفه بعد الاختبار) */
-    (function(){
-      var vw = window.innerWidth;
-      document.querySelectorAll('*').forEach(function(el){
-        var w = el.getBoundingClientRect().width;
-        if (w > vw + 1) { el.style.outline = '2px solid red'; }
-      });
-    })();
   </script>
 </body>
 </html>
