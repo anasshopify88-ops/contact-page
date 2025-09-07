@@ -134,19 +134,21 @@
       .actions .btn{width:100%}
     }
 
-    /* 🛠 إصلاح التمدد الأفقي على الجوال */
+    /* 🛠 إصلاح التمدد الأفقي على الجوال (مطابق لفكرة النموذج البسيط) */
     @media (max-width:900px){
-      .wrap, .card, form, .row, .actions{
+      html,body{overflow-x:hidden}
+      .wrap, .topbar, .split, .card, .media, .form-col, .img-col, form, .row, .actions{
         width:100%;
         max-width:100%;
         min-width:0;
+        overflow-x:hidden;
       }
       .split > *, .row > * { min-width:0; }
-      .actions .btn{white-space:normal;word-break:break-word}
-      .meta, .meta a{word-break:break-word;overflow-wrap:anywhere}
-      html,body{overflow-x:hidden}
+      .actions .btn, .meta, .meta a{white-space:normal;word-break:break-word;overflow-wrap:anywhere;max-width:100%}
+      input, textarea { max-width:100%; }
+      .profile-mobile, .profile-mobile img { max-width:100%; }
     }
-</style>
+  </style>
 
 </head>
 <body>
