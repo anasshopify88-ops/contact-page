@@ -34,26 +34,30 @@
     .meta a{color:var(--text);text-decoration:underline}
     .hp{position:absolute;left:-99999px;width:1px;height:1px;overflow:hidden}
     .logo{text-align:center;margin-bottom:20px}
-    .logo img{max-height:90px;width:auto}
+    .logo img{max-height:120px;width:auto;display:block;margin:0 auto}
   </style>
 </head>
 <body>
   <div class="wrap">
 
+    <!-- الشعار -->
+    <div class="logo">
+      <img src="1.png" alt="شعار المتجر">
+    </div>
 
     <div class="card">
       <h1>تواصل مع أنس راشد</h1>
-      <p class="lead">حياك الله يا عزيزي، يسعدني تواصلك معايا، ارسل رسالتك وبرد عليك في اقرب وقت</p>
+      <p class="lead">حياك الله يا عزيزي، يسعدني تواصلك. اكتب رسالتك وبرد عليك بأقرب وقت.</p>
 
-      <!-- استبدل FORM_ID_HERE بمعرّف النموذج من Formspree -->
-<form action="https://formspree.io/f/xkgvkvbk" method="POST" id="contactForm">
+      <!-- نموذج الإرسال -->
+      <form action="https://formspree.io/f/xkgvkvbk" method="POST" id="contactForm">
         <!-- honeypot -->
         <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
 
         <!-- موضوع الإيميل (اختياري) -->
         <input type="hidden" name="_subject" value="رسالة جديدة من صفحة تواصل معنا">
 
-        <!-- إعادة توجيه لصفحة الشكر (اختياري) -->
+        <!-- إعادة توجيه لصفحة الشكر -->
         <input type="hidden" name="_redirect" value="https://anasshopify88-ops.github.io/contact-page/thanks.html">
 
         <!-- تمرير رابط الصفحة داخل الرسالة -->
