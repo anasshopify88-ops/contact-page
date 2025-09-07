@@ -7,21 +7,15 @@
   <meta name="description" content="نموذج تواصل لإرسال رسالة إلى البريد وبدء محادثة واتساب.">
   <style>
     :root{
-      /* 🎨 الخلفية أزرق فاتح هادئ */
+      /* خلفية هادئة وصندوق أبيض؛ الأزرار كما هي (أسود + واتساب) */
       --bg-grad: linear-gradient(180deg, #f0f9ff, #e0f2fe);
-      /* 🎨 الصندوق أبيض نقي */
-      --card: #ffffff;
-      --card-border: #e2e8f0;
-      --text:#0f172a;
-      --muted:#475569;
-      --line:#cbd5e1;
-      --btn:#111827;       /* زر رئيسي أسود */
-      --btn-hover:#0b1220; /* أغمق عند الهوفر */
-      --wa:#25D366;        /* واتساب أخضر */
-      --glow: 0 10px 30px rgba(15,23,42,0.08);
+      --card:#ffffff; --card-border:#e2e8f0;
+      --text:#0f172a; --muted:#475569; --line:#cbd5e1;
+      --btn:#111827; --btn-hover:#0b1220; --wa:#25D366;
+      --radius:20px; --shadow:0 10px 30px rgba(15,23,42,0.08);
     }
 
-    /* Reset + منع أي تمدد عرضي */
+    /* Reset + منع سحب أفقي */
     *,*::before,*::after{box-sizing:border-box}
     html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
     @supports(overflow:clip){html,body{overflow-x:clip}}
@@ -29,95 +23,84 @@
     input,textarea,button,a{max-width:100%}
     body,.wrap,.card,form,.row,.actions{overflow-wrap:anywhere;word-break:break-word}
 
-    /* الخلفية والتخطيط العام */
     body{
       font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
-      color:var(--text);
-      line-height:1.65;
+      color:var(--text); line-height:1.65;
       background:var(--bg-grad);
-      padding:28px 16px;
-      min-height:100dvh;
-      display:grid;
-      place-items:center;
+      min-height:100dvh; display:grid; place-items:center;
+      padding:24px 16px;
     }
+    .wrap{width:100%;max-width:1040px}
 
-    .wrap{width:100%;max-width:880px}
-
-    /* الشريط العلوي */
-    .topbar{
-      display:flex;
-      justify-content:flex-start; /* زر رجوع يسار */
-      margin-bottom:14px;
-    }
+    /* شريط علوي: زر رجوع يسار */
+    .topbar{display:flex;justify-content:flex-start;margin-bottom:14px}
     .back-btn{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:10px 14px;border-radius:999px;border:1px solid var(--card-border);
-      background:#ffffff;
-      text-decoration:none;color:#0b1220;font-weight:800;cursor:pointer;
-      transition:background .2s, transform .05s;
-      box-shadow:0 2px 6px rgba(0,0,0,0.06);
+      display:inline-flex;align-items:center;gap:8px;
+      padding:9px 14px;border-radius:999px;border:1px solid var(--card-border);
+      background:#fff;color:#0b1220;font-weight:800;cursor:pointer;text-decoration:none;
+      box-shadow:0 2px 6px rgba(0,0,0,0.06);transition:background .2s,transform .05s
     }
     .back-btn:active{transform:translateY(1px)}
 
-    .card{
-      width:100%;
-      background:var(--card);
-      border:1px solid var(--card-border);
-      border-radius:20px;
-      box-shadow: var(--glow);
-      padding:28px;
-      position:relative;
+    /* تخطيط: صورتك يسار، النموذج يمين */
+    .split{display:grid;gap:18px;grid-template-columns:1fr 1fr;align-items:stretch}
+    @media (max-width:900px){.split{grid-template-columns:1fr}}
+    /* على الجوال: خلي النموذج أولاً ثم الصورة */
+    @media (max-width:900px){
+      .form-col{order:1}
+      .img-col{order:2}
     }
 
-    header{text-align:center;margin-bottom:14px}
-    h1{margin:0 0 8px;font-size:clamp(24px,4.2vw,34px);font-weight:900;letter-spacing:.2px}
+    .media{
+      background:#fff;border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);overflow:hidden;height:100%
+    }
+    .media img{
+      width:100%;height:100%;object-fit:cover;aspect-ratio:4/5; /* عمودية أنيقة */
+    }
+
+    .card{
+      background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:26px;display:flex;flex-direction:column;justify-content:center
+    }
+
+    header{text-align:center;margin-bottom:12px}
+    h1{margin:0 0 8px;font-size:clamp(24px,3.8vw,34px);font-weight:900}
     .lead{margin:0;color:var(--muted);font-size:clamp(14px,2.5vw,16px)}
 
-    form{display:grid;gap:16px;margin-top:18px}
-    label{font-weight:800;font-size:13px;color:#0b1220}
-    .row{display:grid;gap:14px;grid-template-columns:1fr;min-width:0}
-    .row>*{min-width:0}
-    @media (min-width:768px){ .row{grid-template-columns:1fr 1fr} }
+    form{display:grid;gap:16px;margin-top:16px}
+    label{font-weight:800;font-size:13px;color:#111827}
+    .row{display:grid;gap:14px;grid-template-columns:1fr}
+    @media (min-width:840px){.row{grid-template-columns:1fr 1fr}}
 
     input,textarea{
-      width:100%;
-      padding:13px 14px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:#f8fafc;
-      font-size:15px; outline:none;
-      transition:border-color .18s, box-shadow .18s, background .18s;
+      width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#f8fafc;
+      font-size:15px;outline:none;transition:border-color .18s, box-shadow .18s, background .18s
     }
-    input::placeholder, textarea::placeholder{color:#94a3b8}
-    input:focus,textarea:focus{
-      border-color:#334155;
-      box-shadow:0 0 0 4px rgba(51,65,85,.08);
-      background:#fff;
-    }
+    input::placeholder,textarea::placeholder{color:#94a3b8}
+    input:focus,textarea:focus{border-color:#111827;box-shadow:0 0 0 4px rgba(17,24,39,.06);background:#fff}
 
-    .actions{
-      display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;min-width:0
-    }
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
     .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      padding:13px 20px;border-radius:999px;font-weight:800;border:0;cursor:pointer;text-decoration:none;
-      transition:transform .05s ease, box-shadow .2s, background .2s;
-      white-space:normal;
+      padding:12px 20px;border-radius:999px;font-weight:800;border:0;cursor:pointer;text-decoration:none;
+      transition:transform .05s, background .2s, box-shadow .2s;white-space:normal
     }
     .btn:active{transform:translateY(1px)}
-    .btn-primary{background:var(--btn);color:#fff;box-shadow:0 8px 18px rgba(17,24,39,.15)}
+    .btn-primary{background:var(--btn);color:#fff;box-shadow:0 8px 18px rgba(17,24,39,.12)}
     .btn-primary:hover{background:var(--btn-hover)}
-    .btn-wa{background:var(--wa);color:#0f291e;box-shadow:0 8px 18px rgba(16,185,129,.25)}
-    .btn-wa:hover{filter:saturate(1.1)}
+    .btn-wa{background:var(--wa);color:#052e1a;box-shadow:0 8px 18px rgba(16,185,129,.22)}
+    .btn-wa:hover{filter:saturate(1.05)}
 
-    .meta{margin-top:8px;color:#475569;font-size:14px;text-align:center}
+    .meta{margin-top:6px;color:#475569;font-size:14px;text-align:center}
     .meta a{color:#0b1220;text-decoration:underline}
 
-    .hp{position:absolute;left:-99999px;width:1px;height:1px;overflow:hidden}
+    .hp{position:absolute;left:-9999px}
     #formStatus{display:none;color:#b91c1c;text-align:center;font-weight:700}
 
+    /* جوال: الأزرار بعرض كامل */
     @media (max-width:768px){
-      .card{padding:24px}
+      .card{padding:22px}
       .actions{flex-direction:column;align-items:stretch}
       .actions .btn{width:100%}
     }
@@ -125,63 +108,69 @@
 </head>
 <body>
   <div class="wrap">
-    <!-- الشريط العلوي -->
     <div class="topbar">
-      <button class="back-btn" type="button" onclick="history.back()" aria-label="رجوع للصفحة السابقة">
-        ← رجوع
-      </button>
+      <button class="back-btn" type="button" onclick="history.back()" aria-label="رجوع للصفحة السابقة">← رجوع</button>
     </div>
 
-    <!-- البطاقة -->
-    <div class="card">
-      <header>
-        <h1>تواصل مع أنس راشد</h1>
-        <p class="lead">يسعدني تواصلك معي — اكتب رسالتك وسأرد عليك في اقرب وقت</p>
-      </header>
+    <div class="split">
+      <!-- عمود الصورة (يسار على الديسكتوب) -->
+      <figure class="media img-col" aria-label="صورة شخصية">
+        <!-- ✅ ضع رابط الصورة المباشر (Imgur) -->
+        <img src="https://i.imgur.com/B3UkEQ0.png" alt="صورة شخصية">
+      </figure>
 
-      <form action="https://formspree.io/f/xkgvkvbk" method="POST" id="contactForm" novalidate>
-        <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
-        <input type="hidden" name="_subject" value="رسالة جديدة من صفحة تواصل معنا">
-        <input type="hidden" name="from_page" id="from_page">
+      <!-- عمود النموذج (يمين على الديسكتوب) -->
+      <section class="card form-col">
+        <header>
+          <h1>تواصل مع أنس راشد</h1>
+          <p class="lead">يسعدنا استقبال رسائلك واستفساراتك — اكتب رسالتك وسنرد عليك سريعًا.</p>
+        </header>
 
-        <div class="row">
-          <div>
-            <label for="name">الاسم الكامل</label>
-            <input id="name" name="name" type="text" required placeholder="اكتب اسمك هنا">
+        <form action="https://formspree.io/f/xkgvkvbk" method="POST" id="contactForm" novalidate>
+          <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+          <input type="hidden" name="_subject" value="رسالة جديدة من صفحة تواصل معنا">
+          <input type="hidden" name="from_page" id="from_page">
+
+          <div class="row">
+            <div>
+              <label for="name">الاسم الكامل</label>
+              <input id="name" name="name" type="text" required placeholder="اكتب اسمك هنا">
+            </div>
+            <div>
+              <label for="email">البريد الإلكتروني</label>
+              <input id="email" name="email" type="email" required placeholder="name@email.com">
+            </div>
           </div>
+
           <div>
-            <label for="email">البريد الإلكتروني</label>
-            <input id="email" name="email" type="email" required placeholder="name@email.com">
+            <label for="phone">رقم الجوال (اختياري)</label>
+            <input id="phone" name="phone" type="tel" placeholder="+9665xxxxxxxx">
           </div>
-        </div>
 
-        <div>
-          <label for="phone">رقم الجوال (اختياري)</label>
-          <input id="phone" name="phone" type="tel" placeholder="+9665xxxxxxxx">
-        </div>
+          <div>
+            <label for="subject">الموضوع</label>
+            <input id="subject" name="subject" type="text" required placeholder="عن ماذا يدور استفسارك؟">
+          </div>
 
-        <div>
-          <label for="subject">الموضوع</label>
-          <input id="subject" name="subject" type="text" required placeholder="الموضوع">
-        </div>
+          <div>
+            <label for="message">الرسالة</label>
+            <textarea id="message" name="message" rows="6" required placeholder="اكتب رسالتك هنا…"></textarea>
+          </div>
 
-        <div>
-          <label for="message">الرسالة</label>
-          <textarea id="message" name="message" rows="6" required placeholder="اكتب رسالتك هنا…"></textarea>
-        </div>
+          <div class="actions">
+            <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
+            <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener" aria-label="التواصل عبر واتساب">المحادثة عبر واتساب</a>
+          </div>
 
-        <div class="actions">
-          <button type="submit" class="btn btn-primary">إرسال الرسالة</button>
-          <a class="btn btn-wa" id="waBtn" target="_blank" rel="noopener" aria-label="التواصل عبر واتساب">المحادثة عبر واتساب</a>
-        </div>
-
-        <p class="meta">أو راسلني مباشرة على: <a href="mailto:Hala@anasrashed.com">Hala@anasrashed.com</a></p>
-        <p id="formStatus">حدث خطأ أثناء الإرسال، حاول مرة أخرى.</p>
-      </form>
+          <p class="meta">أو راسلنا مباشرة على: <a href="mailto:Hala@anasrashed.com">Hala@anasrashed.com</a></p>
+          <p id="formStatus">حدث خطأ أثناء الإرسال، حاول مرة أخرى.</p>
+        </form>
+      </section>
     </div>
   </div>
 
   <script>
+    // تمرير رابط الصفحة + تهيئة رسالة واتساب
     (function(){
       var url = window.location.href;
       document.getElementById('from_page').value = url;
@@ -190,6 +179,7 @@
       document.getElementById('waBtn').href = waLink;
     })();
 
+    // إرسال عبر fetch ثم تحويل ل thanks.html (لو عندك صفحة شكر)
     document.getElementById('contactForm').addEventListener('submit', async function(e){
       e.preventDefault();
       const form = e.target;
