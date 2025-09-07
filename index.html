@@ -33,32 +33,22 @@
     .meta{margin-top:10px;color:var(--muted);font-size:14px;text-align:center}
     .meta a{color:var(--text);text-decoration:underline}
     .hp{position:absolute;left:-99999px;width:1px;height:1px;overflow:hidden}
-    .logo{text-align:center;margin-bottom:20px}
-    .logo img{max-height:120px;width:auto;display:block;margin:0 auto}
+    #formStatus{display:none;color:#b91c1c;text-align:center}
   </style>
 </head>
 <body>
   <div class="wrap">
-
-    <!-- الشعار -->
-    <div class="logo">
-      <img src="1.png" alt="شعار المتجر">
-    </div>
-
     <div class="card">
       <h1>تواصل مع أنس راشد</h1>
       <p class="lead">حياك الله يا عزيزي، يسعدني تواصلك. اكتب رسالتك وبرد عليك بأقرب وقت.</p>
 
       <!-- نموذج الإرسال -->
       <form action="https://formspree.io/f/xkgvkvbk" method="POST" id="contactForm">
-        <!-- honeypot -->
+        <!-- honeypot لمنع السبام -->
         <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
 
         <!-- موضوع الإيميل (اختياري) -->
         <input type="hidden" name="_subject" value="رسالة جديدة من صفحة تواصل معنا">
-
-        <!-- إعادة توجيه لصفحة الشكر -->
-        <input type="hidden" name="_redirect" value="https://anasshopify88-ops.github.io/contact-page/thanks.html">
 
         <!-- تمرير رابط الصفحة داخل الرسالة -->
         <input type="hidden" name="from_page" id="from_page">
@@ -91,19 +81,46 @@
         <p class="meta">
           أو راسلنا مباشرة: <a href="mailto:Hala@anasrashed.com">Hala@anasrashed.com</a>
         </p>
+
+        <p id="formStatus">حدث خطأ أثناء الإرسال، حاول مرة أخرى.</p>
       </form>
     </div>
   </div>
 
   <script>
-    // تمرير رابط الصفحة + تهيئة رسالة واتساب المسبقة
+    // تجهيز حقل from_page + زر واتساب
     (function(){
       var url = window.location.href;
       document.getElementById('from_page').value = url;
-      var msg = "مرحباً، لدي استفسار. الرابط: " + url;
-      var waLink = "https://wa.me/966534818298?text=" + encodeURIComponent(msg);
+      var waLink = "https://wa.me/966534818298?text=" + encodeURIComponent("مرحباً، لدي استفسار. الرابط: " + url);
       document.getElementById('waBtn').href = waLink;
     })();
+
+    // إرسال عبر fetch ثم توجيه لصفحة الشكر (مجاناً)
+    document.getElementById('contactForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const statusEl = document.getElementById('formStatus');
+      statusEl.style.display = 'none';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          window.location.href = 'thanks.html'; // تحويل لصفحتك الخاصة
+        } else {
+          statusEl.textContent = 'تعذر الإرسال الآن. تأكد من الحقول وجرب مرة أخرى.';
+          statusEl.style.display = 'block';
+        }
+      } catch (err) {
+        statusEl.textContent = 'انقطع الاتصال. حاول مجددًا.';
+        statusEl.style.display = 'block';
+      }
+    });
   </script>
 </body>
 </html>
