@@ -25,7 +25,10 @@
       min-height:100dvh; display:grid; place-items:center;
       padding:24px 16px;
     }
-    .wrap{width:100%;max-width:1040px}
+    .wrap{
+      width:100%;
+      max-width:1280px; /* ← زودنا العرض */
+    }
 
     .topbar{display:flex;justify-content:flex-start;margin-bottom:14px}
     .back-btn{
@@ -38,7 +41,7 @@
 
     .split{
       display:grid; gap:18px;
-      grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+      grid-template-columns:2fr 1fr; /* ← الكارد أعرض من الصورة */
       align-items:stretch;
     }
     .split > *{min-width:0}
@@ -122,6 +125,7 @@
       .actions .btn{width:100%}
     }
   </style>
+
 </head>
 <body>
   <div class="wrap">
