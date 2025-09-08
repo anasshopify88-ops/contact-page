@@ -6,22 +6,13 @@
   <title>تواصل مع أنس راشد</title>
   <meta name="description" content="نموذج تواصل لإرسال رسالة إلى البريد وبدء محادثة واتساب.">
   <style>
-    /* ===== خيارات لون الكارد (اختر قيمًا لـ --card و --card-border إن أردت تغيير الثيم) =====
-       1) أزرق فاتح ناعم:      --card:#f0f9ff; --card-border:#e2f2fe;
-       2) رمادي فخم:           --card:#f8fafc; --card-border:#e2e8f0;
-       3) فروستد جلاس (مفعّل): --card:rgba(255,255,255,.8); --card-border:#e2e8f0;
-    ================================================================================================= */
-
     :root{
       --bg-grad: linear-gradient(180deg, #f0f9ff, #e0f2fe);
-      --card: rgba(255,255,255,0.8);   /* ← الثيم المفعّل الآن */
-      --card-border:#e2e8f0;
-
+      --card:#ffffff; --card-border:#e2e8f0;
       --text:#0f172a; --muted:#475569; --line:#cbd5e1;
       --btn:#111827; --btn-hover:#0b1220; --wa:#25D366;
       --radius:20px; --shadow:0 10px 30px rgba(15,23,42,0.08);
     }
-
     *,*::before,*::after{box-sizing:border-box}
     html,body{margin:0;padding:0;width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%}
     body,.wrap,.card,form,.row,.actions{overflow-wrap:anywhere;word-break:break-word}
@@ -45,28 +36,37 @@
     }
     .back-btn:active{transform:translateY(1px)}
 
-    /* صندوق واحد (مثل الجوال) */
-    .split{display:block}
+    /* ✅ الصورة أضيق (2fr) والنموذج أعرض (3fr) */
+    .split{
+      display:grid; gap:18px;
+      grid-template-columns:minmax(0,2fr) minmax(0,3fr);
+      align-items:stretch;
+    }
+    .split > *{min-width:0}
+    @media (max-width:900px){
+      .split{grid-template-columns:minmax(0,1fr)}
+      .form-col{order:1}
+      .img-col{order:2}
+    }
+
+    .media{
+      margin:0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);height:100%;
+      max-width:100%;
+    }
+    .media img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius)}
 
     .card{
       background:var(--card);border:1px solid var(--card-border);
       border-radius:var(--radius);box-shadow:var(--shadow);
-      -webkit-backdrop-filter: blur(8px); /* دعم iOS/Safari */
-      backdrop-filter: blur(8px);
-      padding:26px;display:flex;flex-direction:column;justify-content:center;max-width:100%;
+      padding:26px;display:flex;flex-direction:column;justify-content:center;height:100%;max-width:100%;
     }
 
-    /* الصورة داخل نفس الصندوق */
-    .profile{
-      display:flex;justify-content:center;margin-bottom:14px;
-    }
-    .profile img{
-      width:clamp(160px, 18vw, 220px);
-      height:clamp(160px, 18vw, 220px);
-      border-radius:50%;
-      object-fit:contain;
-      background:#fff;
-      box-shadow:var(--shadow);
+    /* صورة دائرية للجوال */
+    .profile-mobile { display:none; }
+    @media (max-width:900px){
+      .media { display:none; }
+      .profile-mobile { display:flex;justify-content:center;margin-bottom:14px; }
+      .profile-mobile img { width:180px;height:180px;border-radius:50%;object-fit:contain;background:#fff; }
     }
 
     header{text-align:center;margin-bottom:12px}
@@ -77,10 +77,10 @@
     label{font-weight:800;font-size:13px;color:#111827}
 
     .row{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+    .row > *{min-width:0}
     @media (min-width:840px){
       .row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
     }
-    .row > *{min-width:0}
 
     input,textarea{
       width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#f8fafc;
@@ -137,9 +137,14 @@
     </div>
 
     <div class="split">
-      <!-- صندوق واحد: الصورة داخل الكارد مثل الجوال -->
+      <!-- العمود 1: الصورة (أضيق) -->
+      <figure class="media img-col" aria-label="صورة شخصية">
+        <img src="https://i.imgur.com/B3UkEQ0.png" alt="صورة شخصية">
+      </figure>
+
+      <!-- العمود 2: الكارد (أعرض) -->
       <section class="card form-col">
-        <div class="profile">
+        <div class="profile-mobile">
           <img src="https://i.imgur.com/B3UkEQ0.png" alt="صورة شخصية">
         </div>
 
