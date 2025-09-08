@@ -25,10 +25,7 @@
       min-height:100dvh; display:grid; place-items:center;
       padding:24px 16px;
     }
-    .wrap{
-      width:100%;
-      max-width:1280px; /* ← زودنا العرض */
-    }
+    .wrap{width:100%;max-width:1280px}
 
     .topbar{display:flex;justify-content:flex-start;margin-bottom:14px}
     .back-btn{
@@ -39,9 +36,10 @@
     }
     .back-btn:active{transform:translateY(1px)}
 
+    /* ✅ الصورة أضيق (2fr) والنموذج أعرض (3fr) */
     .split{
       display:grid; gap:18px;
-      grid-template-columns:2fr 1fr; /* ← الكارد أعرض من الصورة */
+      grid-template-columns:minmax(0,2fr) minmax(0,3fr);
       align-items:stretch;
     }
     .split > *{min-width:0}
@@ -51,7 +49,10 @@
       .img-col{order:2}
     }
 
-    .media{margin:0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);height:100%}
+    .media{
+      margin:0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);height:100%;
+      max-width:100%;
+    }
     .media img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius)}
 
     .card{
@@ -60,6 +61,7 @@
       padding:26px;display:flex;flex-direction:column;justify-content:center;height:100%;max-width:100%;
     }
 
+    /* صورة دائرية للجوال */
     .profile-mobile { display:none; }
     @media (max-width:900px){
       .media { display:none; }
@@ -104,6 +106,7 @@
     .meta a{color:#0b1220;text-decoration:underline}
     .meta, .meta a, p{overflow-wrap:anywhere;word-break:break-word}
 
+    /* honeypot مخفي بصريًا بدون تمدد */
     .hp{
       position:absolute !important;
       width:1px; height:1px; padding:0; margin:-1px; border:0;
@@ -111,6 +114,7 @@
       overflow:hidden; white-space:nowrap; opacity:0; pointer-events:none;
     }
 
+    /* أخطاء التحقق */
     .field{display:flex;flex-direction:column}
     .field.invalid input,
     .field.invalid textarea{border-color:#b91c1c}
@@ -125,7 +129,6 @@
       .actions .btn{width:100%}
     }
   </style>
-
 </head>
 <body>
   <div class="wrap">
@@ -134,10 +137,12 @@
     </div>
 
     <div class="split">
+      <!-- العمود 1: الصورة (أضيق) -->
       <figure class="media img-col" aria-label="صورة شخصية">
         <img src="https://i.imgur.com/B3UkEQ0.png" alt="صورة شخصية">
       </figure>
 
+      <!-- العمود 2: الكارد (أعرض) -->
       <section class="card form-col">
         <div class="profile-mobile">
           <img src="https://i.imgur.com/B3UkEQ0.png" alt="صورة شخصية">
@@ -207,6 +212,77 @@
       var waLink = "https://wa.me/966534818298?text=" + encodeURIComponent(msg);
       document.getElementById('waBtn').href = waLink;
     })();
+
+    const form     = document.getElementById('contactForm');
+    const statusEl = document.getElementById('formStatus');
+    const submitBt = document.getElementById('submitBtn');
+    const reqIds   = ['name','email','subject','message'];
+
+    function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+    reqIds.forEach(id=>{
+      const field  = document.getElementById(id);
+      field.addEventListener('input', ()=>{
+        const wrap = field.closest('.field');
+        if(field.value.trim() && (id!=='email' || isEmail(field.value.trim()))){
+          wrap.classList.remove('invalid');
+        }
+      });
+    });
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      statusEl.style.display = 'none';
+
+      let valid = true;
+      reqIds.forEach(id=>{
+        const field = document.getElementById(id);
+        const wrap  = field.closest('.field');
+        const val   = field.value.trim();
+        if(!val || (id==='email' && !isEmail(val))){
+          wrap.classList.add('invalid');
+          valid = false;
+        }else{
+          wrap.classList.remove('invalid');
+        }
+      });
+      if(!valid){
+        statusEl.textContent = 'يرجى تعبئة الحقول المطلوبة بشكل صحيح.';
+        statusEl.style.display = 'block';
+        return;
+      }
+
+      submitBt.disabled = true;
+      submitBt.textContent = 'يتم الإرسال…';
+
+      try {
+        const data = new FormData(form);
+        const res  = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        let payload = {};
+        try { payload = await res.json(); } catch(_) {}
+
+        if (res.ok && payload.ok === true) {
+          window.location.href = 'thanks.html';
+        } else {
+          const msg = (payload && payload.errors && payload.errors.length)
+            ? payload.errors.map(e=>e.message).join('، ')
+            : 'تعذر الإرسال الآن. تأكد من الحقول وجرب مرة أخرى.';
+          statusEl.textContent = msg;
+          statusEl.style.display = 'block';
+          submitBt.disabled = false;
+          submitBt.textContent = 'إرسال الرسالة';
+        }
+      } catch (err) {
+        statusEl.textContent = 'انقطع الاتصال. حاول مجددًا.';
+        statusEl.style.display = 'block';
+        submitBt.disabled = false;
+        submitBt.textContent = 'إرسال الرسالة';
+      }
+    });
   </script>
 </body>
 </html>
