@@ -101,7 +101,6 @@
     .meta a{color:#0b1220;text-decoration:underline}
     .meta, .meta a, p{overflow-wrap:anywhere;word-break:break-word}
 
-    /* honeypot (مخفي بصريًا) */
     .hp{
       position:absolute !important;
       width:1px; height:1px; padding:0; margin:-1px; border:0;
@@ -109,7 +108,6 @@
       overflow:hidden; white-space:nowrap; opacity:0; pointer-events:none;
     }
 
-    /* أخطاء التحقق */
     .field{display:flex;flex-direction:column}
     .field.invalid input,
     .field.invalid textarea{border-color:#b91c1c}
@@ -178,6 +176,9 @@
 
           <div class="field">
             <label for="message">الرسالة</label>
+            <small style="color:#b91c1c; font-size:12px; font-weight:600; margin:2px 0 6px;">
+              ارسل الرسالة مرتين لأنه ممكن ما توصل من اول مره بسبب خلل تقني او تواصل واتساب 🙏🏻
+            </small>
             <textarea id="message" name="message" rows="6" required placeholder="اكتب رسالتك هنا…"></textarea>
             <span class="error-msg">هذا الحقل مطلوب</span>
           </div>
@@ -202,80 +203,6 @@
       var waLink = "https://wa.me/966534818298?text=" + encodeURIComponent(msg);
       document.getElementById('waBtn').href = waLink;
     })();
-
-    const form     = document.getElementById('contactForm');
-    const statusEl = document.getElementById('formStatus');
-    const submitBt = document.getElementById('submitBtn');
-    const reqIds   = ['name','email','subject','message'];
-
-    function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-
-    reqIds.forEach(id=>{
-      const field  = document.getElementById(id);
-      field.addEventListener('input', ()=>{
-        const wrap = field.closest('.field');
-        if(field.value.trim() && (id!=='email' || isEmail(field.value.trim()))){
-          wrap.classList.remove('invalid');
-        }
-      });
-    });
-
-    form.addEventListener('submit', async function(e){
-      e.preventDefault();
-      statusEl.style.display = 'none';
-
-      let valid = true;
-      reqIds.forEach(id=>{
-        const field = document.getElementById(id);
-        const wrap  = field.closest('.field');
-        const val   = field.value.trim();
-        if(!val || (id==='email' && !isEmail(val))){
-          wrap.classList.add('invalid');
-          valid = false;
-        }else{
-          wrap.classList.remove('invalid');
-        }
-      });
-      if(!valid){
-        statusEl.textContent = 'يرجى تعبئة الحقول المطلوبة بشكل صحيح.';
-        statusEl.style.display = 'block';
-        return;
-      }
-
-      // منع الإرسال المزدوج
-      submitBt.disabled = true;
-      submitBt.textContent = 'يتم الإرسال…';
-
-      try {
-        const data = new FormData(form);
-        const res  = await fetch(form.action, {
-          method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
-        });
-
-        // نقرأ جسم الرد للتحقق من ok/errors
-        let payload = {};
-        try { payload = await res.json(); } catch(_) {}
-
-        if (res.ok && payload.ok === true) {
-          window.location.href = 'thanks.html';
-        } else {
-          const msg = (payload && payload.errors && payload.errors.length)
-            ? payload.errors.map(e=>e.message).join('، ')
-            : 'تعذر الإرسال الآن. تأكد من الحقول وجرب مرة أخرى.';
-          statusEl.textContent = msg;
-          statusEl.style.display = 'block';
-          submitBt.disabled = false;
-          submitBt.textContent = 'إرسال الرسالة';
-        }
-      } catch (err) {
-        statusEl.textContent = 'انقطع الاتصال. حاول مجددًا.';
-        statusEl.style.display = 'block';
-        submitBt.disabled = false;
-        submitBt.textContent = 'إرسال الرسالة';
-      }
-    });
   </script>
 </body>
 </html>
