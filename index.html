@@ -27,7 +27,7 @@
     }
     .wrap{width:100%;max-width:1280px}
 
-    .topbar{display:flex;justify-content:flex-start;margin-bottom:14px}
+    .topbar{display:flex;justify-content:flex-start;align-items:center;gap:10px;margin-bottom:14px}
     .back-btn{
       display:inline-flex;align-items:center;gap:8px;
       padding:9px 14px;border-radius:999px;border:1px solid var(--card-border);
@@ -35,6 +35,12 @@
       box-shadow:0 2px 6px rgba(0,0,0,0.06);transition:background .2s,transform .05s
     }
     .back-btn:active{transform:translateY(1px)}
+    /* زر الصفحة الرئيسية (نفس المقاس، لون داكن) */
+    .home-btn{
+      background:var(--btn); color:#fff; border-color:var(--btn);
+      box-shadow:0 2px 8px rgba(17,24,39,.15);
+    }
+    .home-btn:hover{ background:var(--btn-hover) }
 
     /* ✅ الصورة أضيق (2fr) والنموذج أعرض (3fr) */
     .split{
@@ -71,7 +77,7 @@
 
     header{text-align:center;margin-bottom:12px}
     h1{margin:0 0 8px;font-size:clamp(24px,3.8vw,34px);font-weight:900}
-    .lead{margin:0;color:var(--muted);font-size:clamp(14px,2.5vw,16px)}
+    .lead{margin:0;color:#475569;font-size:clamp(14px,2.5vw,16px)}
 
     form{display:grid;gap:16px;margin-top:16px;max-width:100%}
     label{font-weight:800;font-size:13px;color:#111827}
@@ -134,6 +140,8 @@
   <div class="wrap">
     <div class="topbar">
       <button class="back-btn" type="button" onclick="history.back()" aria-label="رجوع للصفحة السابقة">← رجوع</button>
+      <!-- ↓ نص أقصر = عرض أصغر، نفس ارتفاع زر رجوع -->
+      <a class="back-btn home-btn" href="https://anasrashed.com" aria-label="العودة إلى الصفحة الرئيسية">الرئيسية</a>
     </div>
 
     <div class="split">
